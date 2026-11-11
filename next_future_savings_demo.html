@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEXT. | 未来のための貯金シミュレーション</title>
+<style>
+:root{--navy:#17243a;--mint:#bfe8dc;--paper:#f7f8f7;--ink:#243247;--muted:#687487}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;line-height:1.7}
+header{background:var(--navy);color:white;padding:42px 22px 48px;text-align:center}
+header small{letter-spacing:.25em;color:var(--mint)}h1{font-size:clamp(2.5rem,9vw,4.5rem);letter-spacing:.08em;margin:8px 0}header p{margin:0;color:#e1e8ef}
+main{max-width:850px;margin:28px auto;padding:0 16px}.card{background:white;border:1px solid #e3e8e8;border-radius:18px;padding:22px;margin:18px 0;box-shadow:0 5px 20px #17243a0b}
+h2{font-size:1.3rem;margin:0 0 12px;color:var(--navy)}.lead{font-size:1.04rem}
+label{display:block;font-weight:650;margin:14px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #cbd3da;border-radius:10px;font:inherit;background:white;color:var(--ink)}
+button{border:0;border-radius:999px;padding:12px 18px;background:var(--navy);color:white;font:inherit;font-weight:650;cursor:pointer;margin:10px 7px 0 0}button.secondary{background:#e9f3f0;color:var(--navy)}
+.result{background:#eef8f5;border-radius:14px;padding:18px;margin-top:18px}.amount{font-size:2rem;font-weight:800;color:var(--navy)}.bar{height:13px;background:#dce6e4;border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;width:0;background:#65b9a3;transition:width .2s}
+.note{font-size:.9rem;color:var(--muted)}footer{text-align:center;padding:25px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<header><small>SMALL CHOICES, BIG FUTURE</small><h1>NEXT.</h1><p>使わなかったお金を、未来の楽しみに。</p></header>
+<main>
+<section class="card"><h2>「吸わない」を、未来の楽しみに変える。</h2><p class="lead">たばこを買わずに使わなかったお金を、自分の好きなことや将来の目標に回せたら？ NEXT. は、その金額を見える形にする貯金シミュレーションサイトです。</p></section>
+<section class="card">
+<h2>貯金シミュレーション</h2>
+<p>自分で金額や日数を入力して、どれくらい貯められるか計算してみよう。</p>
+<label for="daily">1日あたりに使わずに済むと考える金額（円）</label><input id="daily" type="number" min="0" value="500">
+<label for="days">日数</label><input id="days" type="number" min="1" value="30">
+<label for="goal">貯金の目標金額（円）</label><input id="goal" type="number" min="1" value="15000">
+<label for="purpose">貯めたお金でしたいこと</label><select id="purpose"><option>趣味・推し活</option><option>買い物</option><option>旅行</option><option>将来のための貯金</option><option>その他</option></select>
+<div class="result" aria-live="polite"><div>シミュレーション結果</div><div class="amount" id="total">15,000円</div><div class="bar"><span id="progress"></span></div><p id="message">目標の100%に到達！</p><p class="note" id="detail">30日間で計算しています。</p></div>
+<button id="copy">結果をコピー</button><button class="secondary" id="reset">リセット</button>
+<p class="note">※金額は入力した仮定に基づくシミュレーションです。実際の喫煙費用や節約額を示すものではありません。</p>
+</section>
+<section class="card"><h2>私が考えた防止策</h2><p>喫煙をしないことで使わずに済んだお金を、趣味や買い物、旅行、将来の貯金などに使う方法を提案する。お金がどれくらい貯まるかを自分で入力して確認できれば、喫煙しないことのメリットを身近に感じられると考えた。</p><p>また、ChatGPTのようなAIに相談しながら目標を決められる仕組みを加えることで、自分の将来について考えるきっかけにもなる。</p></section>
+<section class="card"><h2>このサイトについて</h2><p>これは学校のレポートで提案するアイデアを具体的に示すために作った試作品です。入力内容は送信・保存されず、このページ内で計算するだけです。</p><p class="note">参考：厚生労働省「たばこ対策」・e-ヘルスネット</p><p><a href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000189195.html">厚生労働省のたばこ対策</a> ／ <a href="https://www.e-healthnet.mhlw.go.jp/">e-ヘルスネット</a></p></section>
+</main><footer>NEXT. — Your future starts with small choices.</footer>
+<script>
+const daily=document.getElementById('daily'),days=document.getElementById('days'),goal=document.getElementById('goal');
+function update(){const total=Math.max(0,Number(daily.value)||0)*Math.max(0,Number(days.value)||0),g=Math.max(1,Number(goal.value)||1),pct=Math.min(100,total/g*100);document.getElementById('total').textContent=total.toLocaleString('ja-JP')+'円';document.getElementById('progress').style.width=pct+'%';document.getElementById('message').textContent=pct>=100?'目標の金額に到達！':`目標の約${Math.round(pct)}%です。`;document.getElementById('detail').textContent=`${Number(days.value)||0}日間 × 1日${(Number(daily.value)||0).toLocaleString('ja-JP')}円で計算しています。`;}
+[daily,days,goal].forEach(el=>el.addEventListener('input',update));
+document.getElementById('reset').addEventListener('click',()=>{daily.value=500;days.value=30;goal.value=15000;update();});
+document.getElementById('copy').addEventListener('click',async()=>{const s=`NEXT. 貯金シミュレーション結果：${document.getElementById('total').textContent}（${days.value}日間）`;try{await navigator.clipboard.writeText(s);alert('結果をコピーしました！')}catch(e){alert(s)}});
+update();
+</script></body></html>
